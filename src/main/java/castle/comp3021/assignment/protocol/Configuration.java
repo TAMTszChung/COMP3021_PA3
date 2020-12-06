@@ -97,6 +97,22 @@ public class Configuration implements Cloneable {
 
         //TODO
         // validate {@link this#criticalRegionSize} here
+        if (this.criticalRegionSize <= 0) {
+            throw new
+                    InvalidConfigurationError("critical region size of gameboard must be at least 1");
+        }
+        if (this.criticalRegionSize % 2 != 1) {
+            throw new
+                    InvalidConfigurationError("critical region size of gameboard must be an odd number");
+        }
+        if (this.criticalRegionSize > this.size - 2) {
+            throw new
+                    InvalidConfigurationError("critical region size of gameboard is at most size of gameboard - 2");
+        }
+        if (this.criticalRegionCapacity <= 0 || this.criticalRegionCapacity > this.size) {
+            throw new InvalidConfigurationError
+                    ("capacity of critical region size for each player of gameboard is at least 1 and at most size of game board");
+        }
 
         //validate number of players
         if (players.length != 2) {
