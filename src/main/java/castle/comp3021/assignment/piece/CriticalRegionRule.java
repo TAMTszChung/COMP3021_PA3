@@ -1,9 +1,6 @@
 package castle.comp3021.assignment.piece;
 
-import castle.comp3021.assignment.protocol.Configuration;
-import castle.comp3021.assignment.protocol.Game;
-import castle.comp3021.assignment.protocol.Move;
-import castle.comp3021.assignment.protocol.Place;
+import castle.comp3021.assignment.protocol.*;
 
 public class CriticalRegionRule implements Rule {
 
@@ -19,7 +16,47 @@ public class CriticalRegionRule implements Rule {
     @Override
     public boolean validate(Game game, Move move) {
         //TODO
-        return false;
+        Piece currentPiece = game.getPiece(move.getSource());
+        if (currentPiece == null){
+            return false;
+        }
+
+        if (!(currentPiece instanceof Knight)){
+            return true;
+        }
+
+        if (isInCriticalRegion(game, move.getSource())){
+            return true;
+        }
+
+        if (!isInCriticalRegion(game, move.getDestination())){
+            return true;
+        }
+
+        int capacity = game.getConfiguration().getCriticalRegionCapacity();
+        Player currentPlayer = currentPiece.getPlayer();
+        int numCriticalKnight = 0;
+        int boardSize = game.getConfiguration().getSize();
+        for (int i=0; i < boardSize; i++){
+            for (int j=0; j < boardSize; j++){
+                Piece tempPiece = game.getPiece(i, j);
+                if (tempPiece == null){
+                    continue;
+                }
+                if (!tempPiece.getPlayer().equals(currentPlayer)){
+                    continue;
+                }
+                if (!(tempPiece instanceof Knight)){
+                    continue;
+                }
+                if (isInCriticalRegion(game, new Place(i,j))){
+                    continue;
+                }
+                numCriticalKnight++;
+            }
+        }
+
+        return numCriticalKnight < capacity;
     }
 
     /**
