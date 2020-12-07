@@ -37,6 +37,24 @@ public class ResumePieceAction extends Action {
     @Override
     public void perform() throws ActionException {
         //TODO
+        if (this.args.length <= 0) {
+            throw new ActionException("No piece provided");
+        }
+        Place targetPlace = ConsolePlayer.parsePlace(this.args[0]);
+        if (targetPlace == null) {
+            throw new ActionException("Invalid place input" + this.args[0]);
+        }
+        Piece targetPiece = game.getPiece(targetPlace);
+        if (targetPiece == null){
+            throw new ActionException("piece does not exist at " + targetPlace.toString());
+        }
+        if (!(targetPiece.getPlayer() instanceof ComputerPlayer)){
+            throw new ActionException("piece at "
+                    + targetPlace.toString()
+                    + " does not belong to computer player, thus can not be paused");
+        }
+        Thread targetThread = game.getConfiguration().getPieceThread(targetPiece);
+        targetPiece.resume();
     }
 
     @Override
