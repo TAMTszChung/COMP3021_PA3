@@ -30,6 +30,11 @@ public class UndoAction extends Action {
     @Override
     public void perform() throws ActionException {
         //TODO
+        try{
+            this.game.undo();
+        } catch (UndoException e) {
+            throw new ActionException(e.getMessage());
+        }
     }
 
     @Override
