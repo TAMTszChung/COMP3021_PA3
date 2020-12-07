@@ -34,7 +34,15 @@ public class CriticalRegionRule implements Rule {
      */
     private boolean isInCriticalRegion(Game game, Place place) {
         //TODO
-        return false;
+        int criticalRegionSize = game.getConfiguration().getCriticalRegionSize();
+        int criticalRowsFromCenter = criticalRegionSize / 2;
+        Place centerPlace = game.getCentralPlace();
+        int centerY = centerPlace.y();
+        int smallCritical = centerY - criticalRowsFromCenter;
+        int largeCritical = centerY + criticalRowsFromCenter;
+        int currentY = place.y();
+
+        return currentY >= smallCritical && currentY <= largeCritical;
     }
 
     @Override
