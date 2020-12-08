@@ -40,23 +40,27 @@ public class TerminatePieceAction extends Action {
     @Override
     public void perform() throws ActionException {
         //TODO
+        //no piece input
         if (args.length <= 0){
             throw new ActionException("No piece provided");
         }
+        //incorrect place input format
         Place targetPlace = ConsolePlayer.parsePlace(this.args[0]);
         if (targetPlace == null) {
             throw new ActionException("Invalid place input " + this.args[0]);
         }
-
+        //no piece at place input
         Piece targetPiece = game.getPiece(targetPlace);
         if (targetPiece == null){
             throw new ActionException("piece does not exist at " + targetPlace.toString());
         }
+        //non-computer piece
         if (!(targetPiece.getPlayer() instanceof ComputerPlayer)){
             throw new ActionException("piece at "
                     + targetPlace.toString()
                     + " does not belong to computer player, thus can not be paused");
         }
+        //correctly getting computer piece
         Thread targetThread = game.getConfiguration().getPieceThread(targetPiece);
         targetPiece.terminate();
         targetThread.interrupt();

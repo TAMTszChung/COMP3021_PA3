@@ -30,8 +30,10 @@ public class UndoAction extends Action {
     public void perform() throws ActionException {
         //TODO
         try{
+            //try restore old game state
             this.game.undo();
         } catch (UndoException e) {
+            //throw exception for fail undo
             throw new ActionException(e.getMessage());
         }
     }
