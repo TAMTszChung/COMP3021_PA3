@@ -45,7 +45,7 @@ public class TerminatePieceAction extends Action {
         }
         Place targetPlace = ConsolePlayer.parsePlace(this.args[0]);
         if (targetPlace == null) {
-            throw new ActionException("Invalid place input" + this.args[0]);
+            throw new ActionException("Invalid place input " + this.args[0]);
         }
 
         Piece targetPiece = game.getPiece(targetPlace);
