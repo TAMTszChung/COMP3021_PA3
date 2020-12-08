@@ -142,7 +142,9 @@ public abstract class Game implements Cloneable {
             System.out.println("Notice: first " + this.configuration.getNumMovesProtection() + " moves are not allowed to" +
                     " capture pieces or win the game.");
         }
-        System.out.println("Critical region size: " + this.configuration.getCriticalRegionSize() + ", capacity: " + this.configuration.getCriticalRegionCapacity());
+        System.out.println("Critical region size: "
+                + this.configuration.getCriticalRegionSize()
+                + ", capacity: " + this.configuration.getCriticalRegionCapacity());
         System.out.println();
         System.out.println("Total Moves: " + this.numMoves);
         // print scores of players

@@ -64,7 +64,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-//        var helper = "four integer arguments are required specifying <size> <numMovesProtection> <criticalRegionSize> <criticalRegionCapacity>";
+//        var helper = "four integer arguments are required
+//        specifying <size> <numMovesProtection> <criticalRegionSize> <criticalRegionCapacity>";
         if (args.length >= 1) {
             try {
                 size = Integer.parseInt(args[0]);

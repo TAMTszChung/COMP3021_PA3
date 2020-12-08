@@ -2,7 +2,6 @@ package castle.comp3021.assignment.action;
 
 import castle.comp3021.assignment.protocol.Action;
 import castle.comp3021.assignment.protocol.Game;
-import castle.comp3021.assignment.protocol.exception.UndoException;
 
 /**
  * The action to show move history.

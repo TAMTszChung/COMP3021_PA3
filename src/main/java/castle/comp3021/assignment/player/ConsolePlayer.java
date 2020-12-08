@@ -115,8 +115,10 @@ public class ConsolePlayer extends HumanPlayer {
             case "terminate" -> {
                 return new TerminatePieceAction(game, args);
             }
+            default -> {
+                return null;
+            }
         }
-        return null;
     }
 
     public static Place parsePlace(String str) {

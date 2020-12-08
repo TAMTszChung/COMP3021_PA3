@@ -30,7 +30,7 @@ public class PausePieceAction extends Action {
      * Consider corner cases (e.g., invalid {@link this#args})
      * Throw {@link ActionException} when exception happens.
      * <p>
-     * Related meethods:
+     * Related methods:
      * - {@link Piece#pause()}
      * - {@link Thread#interrupt()}
      * <p>
