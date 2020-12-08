@@ -29,6 +29,40 @@ public class JesonMor extends Game {
         }
     }
 
+    private static class GameHistory{
+        public Piece[][] savedBoard;
+        public int savedNumMoves;
+        public Player savedPlayer;
+        public HashMap<Player, Integer> playerScores = new HashMap<>();
+        public List<MoveRecord> savedMoveRecords = new ArrayList<>();
+
+        public GameHistory(Piece[][] board, int numMoves, Player[] players, Player currentPlayer, List<MoveRecord> moveRecords) {
+            //board shallow copy
+            int boardSize = board.length;
+            this.savedBoard = new Piece[boardSize][boardSize];
+            for (int i=0; i < boardSize; i++){
+                for (int j=0; j < boardSize; j++){
+                    this.savedBoard[i][j] = board[i][j];
+                }
+            }
+
+            //copy numMove
+            this.savedNumMoves = numMoves;
+
+            // copy current player
+            this.savedPlayer = currentPlayer;
+
+            //copy Player score
+            for (Player player : players) {
+                this.playerScores.put(player, player.getScore());
+            }
+
+            //copy move records
+            this.savedMoveRecords.addAll(moveRecords);
+        }
+
+    }
+
     private Player winner;
 
     public JesonMor() {
@@ -40,6 +74,8 @@ public class JesonMor extends Game {
     }
 
     private List<MoveRecord> moveRecords = new ArrayList<>();
+
+    private LimitedStack<GameHistory> gameHistories = new LimitedStack<>(Game.undoLimit);
 
     /**
      * Start the game
@@ -202,6 +238,7 @@ public class JesonMor extends Game {
      */
     public @NotNull Move[] getAvailableMoves(Player player) {
         //TODO
+
         return null;
     }
 
@@ -228,6 +265,37 @@ public class JesonMor extends Game {
     @Override
     public void undo() throws UndoException {
         //TODO
+        Player[] players = this.getConfiguration().getPlayers();
+
+        //check undo can be done or not
+        if (players.length!=2){
+            throw new UndoException
+                    ("Undo is only supported when there is one human player and one computer player");
+
+        }
+
+        if (!((players[0] instanceof HumanPlayer && players[1] instanceof ComputerPlayer)
+                || (players[0] instanceof ComputerPlayer && players[1] instanceof HumanPlayer))){
+            throw new UndoException
+                    ("Undo is only supported when there is one human player and one computer player");
+        }
+
+        if (this.gameHistories.size() <= 0){
+            throw new UndoException("No further undo is allowed");
+        }
+
+        //retrieve saved state
+        GameHistory previousState = this.gameHistories.pop();
+        this.board = previousState.savedBoard;
+        this.numMoves = previousState.savedNumMoves;
+        this.moveRecords = previousState.savedMoveRecords;
+        this.currentPlayer = previousState.savedPlayer;
+        for (Player player : players) {
+            player.setScore(previousState.playerScores.get(player));
+        }
+
+        this.refreshOutput();
+        System.out.println("Game state reverted");
     }
 
     /**

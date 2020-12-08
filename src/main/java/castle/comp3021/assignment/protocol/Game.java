@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * The Game class
  */
 public abstract class Game implements Cloneable {
-    public static int UNDO_LIMIT = 3;
+    public static int undoLimit = 3;
 
     /**
      * Game configuration
