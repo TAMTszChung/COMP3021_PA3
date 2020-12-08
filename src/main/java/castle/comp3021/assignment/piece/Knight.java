@@ -93,6 +93,7 @@ public class Knight extends Piece {
     public synchronized Move getCandidateMove(Game game, Place source) {
         //TODO
         Object[] parameters = {game, source};
+        //clear both queue to prevent getting wrong move due to previous data
         calculateMoveParametersQueue.clear();
         candidateMoveQueue.clear();
         try {
@@ -201,15 +202,18 @@ public class Knight extends Piece {
         //TODO
         do{
             try{
+                //interrupted due to terminate
                 if (this.stopped.get()){
                     return;
                 }
+                //interrupted due to pause
                 synchronized (this.running){
                     while (!this.running.get()){
                         this.running.wait();
                     }
                 }
 
+                //get the candidate move
                 Object[] parameters = this.calculateMoveParametersQueue.take();
                 Game game = (Game) parameters[0];
                 Place place = (Place) parameters[1];
@@ -220,11 +224,12 @@ public class Knight extends Piece {
                     continue;
                 }
 
+                //put the candidate move to queue to be polled
                 MakeMoveByBehavior moveByBehavior = new MakeMoveByBehavior(game, moves, this.behavior);
                 Move nextMove = moveByBehavior.getNextMove();
                 this.candidateMoveQueue.put(nextMove);
             } catch (InterruptedException e) {
-                //ignore and continue
+                //go to next iteration to handle the interrupt in try block
             }
         } while (true);
     }
