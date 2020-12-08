@@ -238,8 +238,47 @@ public class JesonMor extends Game {
      */
     public @NotNull Move[] getAvailableMoves(Player player) {
         //TODO
+        if (player instanceof  ComputerPlayer){
+            System.out.println("Computer is figuring out next move...");
+        }
+        HashMap<Place, Piece> pieceMap = new HashMap<>();
+        int boardSize = this.getConfiguration().getSize();
+        for (int i=0; i<boardSize; i++){
+            for (int j=0; j<boardSize; j++){
+                Place currentPlace = new Place(i,j);
+                Piece currentPiece = this.getPiece(currentPlace);
+                if (currentPiece == null){
+                    continue;
+                }
+                if (!currentPiece.getPlayer().equals(player)){
+                    continue;
+                }
+                pieceMap.put(currentPlace, currentPiece);
+            }
+        }
 
-        return null;
+        Move[] results = pieceMap
+                .entrySet()
+                .parallelStream()
+                .flatMap(placePieceEntry -> {
+                    Place tempPlace = placePieceEntry.getKey();
+                    Piece tempPiece = placePieceEntry.getValue();
+                    if (player instanceof HumanPlayer){
+                        return Arrays.stream(tempPiece.getAvailableMoves(this, tempPlace));
+                    }else{
+                        Move candidateMove = tempPiece.getCandidateMove(this, tempPlace);
+                        Move[] availMove = {candidateMove};
+                        if (candidateMove != null){
+                            return Arrays.stream(availMove);
+                        }
+                    }
+                    Move[] availMove = {};
+                    return Arrays.stream(availMove);
+                })
+                .collect(Collectors.toList())
+                .toArray(Move[]::new);
+
+        return results;
     }
 
     /**
