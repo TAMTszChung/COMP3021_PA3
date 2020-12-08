@@ -47,7 +47,7 @@ public class MakeMoveByBehavior {
                             return getCenterDistance(move.getDestination()) < getCenterDistance(move.getSource());
                         })
                         .min(Comparator.comparing(move -> getCenterDistance(move.getDestination())))
-                        .orElseGet(() -> availableMoves[new Random().nextInt(availableMoves.length)]);
+                        .orElse(availableMoves[new Random().nextInt(availableMoves.length)]);
             }
             case CAPTURING -> {
                 Move[] capturingMoves =
