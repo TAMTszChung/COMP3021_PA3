@@ -5,6 +5,7 @@ import castle.comp3021.assignment.protocol.*;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -91,7 +92,17 @@ public class Knight extends Piece {
     @Override
     public synchronized Move getCandidateMove(Game game, Place source) {
         //TODO
-        return null;
+        Object[] parameters = {game, source};
+        try {
+            this.calculateMoveParametersQueue.put(parameters);
+            Move candidate = this.candidateMoveQueue.poll(1, TimeUnit.SECONDS);
+            if (candidate instanceof Knight.InvalidMove){
+                return null;
+            }
+            return candidate;
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     private boolean validateMove(Game game, Move move) {
@@ -138,6 +149,7 @@ public class Knight extends Piece {
     @Override
     public void pause() {
         //TODO
+        this.running.set(false);
     }
 
     /**
@@ -149,6 +161,10 @@ public class Knight extends Piece {
     @Override
     public void resume() {
         //TODO
+        this.running.set(true);
+        synchronized (this.running){
+            this.running.notifyAll();
+        }
     }
 
     /**
@@ -160,6 +176,7 @@ public class Knight extends Piece {
     @Override
     public void terminate() {
         //TODO
+        this.stopped.set(true);
     }
 
     /**
@@ -180,5 +197,31 @@ public class Knight extends Piece {
     @Override
     public void run() {
         //TODO
+        while (true){
+            try{
+                if (this.stopped.get()){
+                    return;
+                }
+                while (!this.running.get()){
+                    this.running.wait();
+                }
+
+                Object[] parameters = this.calculateMoveParametersQueue.take();
+                Game game = (Game) parameters[0];
+                Place place = (Place) parameters[1];
+                Move[] moves = this.getAvailableMoves(game, place);
+
+                if (moves.length <=0){
+                    this.candidateMoveQueue.put(new Knight.InvalidMove());
+                    continue;
+                }
+
+                MakeMoveByBehavior moveByBehavior = new MakeMoveByBehavior(game, moves, this.behavior);
+                Move nextMove = moveByBehavior.getNextMove();
+                this.candidateMoveQueue.put(nextMove);
+            } catch (InterruptedException e) {
+                //ignore and continue
+            }
+        }
     }
 }
