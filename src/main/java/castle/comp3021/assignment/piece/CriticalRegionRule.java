@@ -49,7 +49,7 @@ public class CriticalRegionRule implements Rule {
                 if (!(tempPiece instanceof Knight)){
                     continue;
                 }
-                if (isInCriticalRegion(game, new Place(i,j))){
+                if (!isInCriticalRegion(game, new Place(i,j))){
                     continue;
                 }
                 numCriticalKnight++;
