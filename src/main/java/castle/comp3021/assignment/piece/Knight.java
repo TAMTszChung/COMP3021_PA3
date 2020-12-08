@@ -93,6 +93,8 @@ public class Knight extends Piece {
     public synchronized Move getCandidateMove(Game game, Place source) {
         //TODO
         Object[] parameters = {game, source};
+        calculateMoveParametersQueue.clear();
+        candidateMoveQueue.clear();
         try {
             this.calculateMoveParametersQueue.put(parameters);
             Move candidate = this.candidateMoveQueue.poll(1, TimeUnit.SECONDS);
@@ -202,8 +204,10 @@ public class Knight extends Piece {
                 if (this.stopped.get()){
                     return;
                 }
-                while (!this.running.get()){
-                    this.running.wait();
+                synchronized (this.running){
+                    while (!this.running.get()){
+                        this.running.wait();
+                    }
                 }
 
                 Object[] parameters = this.calculateMoveParametersQueue.take();
