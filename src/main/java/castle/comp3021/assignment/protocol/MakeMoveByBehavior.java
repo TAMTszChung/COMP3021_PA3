@@ -107,12 +107,12 @@ public class MakeMoveByBehavior {
 
     private int getCenterDistance(Place place){
         if (place == null){
-            return -1;
+            return 99999999;
         }
         Place center = game.getCentralPlace();
-        int xChange = Math.abs(place.x() - center.x());
-        int yChange = Math.abs(place.y() - center.y());
-        return Math.abs(xChange + yChange);
+        int xDist = Math.abs(place.x() - center.x());
+        int yDist = Math.abs(place.y() - center.y());
+        return Math.abs(xDist + yDist);
     }
 }
 
