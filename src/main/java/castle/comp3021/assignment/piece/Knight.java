@@ -199,7 +199,7 @@ public class Knight extends Piece {
     @Override
     public void run() {
         //TODO
-        while (true){
+        do{
             try{
                 if (this.stopped.get()){
                     return;
@@ -226,6 +226,6 @@ public class Knight extends Piece {
             } catch (InterruptedException e) {
                 //ignore and continue
             }
-        }
+        } while (true);
     }
 }

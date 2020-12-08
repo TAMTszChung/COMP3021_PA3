@@ -189,7 +189,7 @@ public class Archer extends Piece {
     @Override
     public void run() {
         //TODO
-        while (true){
+        do{
             try{
                 if (this.stopped.get()){
                     return;
@@ -216,6 +216,6 @@ public class Archer extends Piece {
             } catch (InterruptedException e) {
                 //ignore and continue
             }
-        }
+        } while (true);
     }
 }

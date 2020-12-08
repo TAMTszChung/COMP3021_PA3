@@ -36,29 +36,30 @@ public class JesonMor extends Game {
         public HashMap<Player, Integer> playerScores = new HashMap<>();
         public List<MoveRecord> savedMoveRecords = new ArrayList<>();
 
-        public GameHistory(Piece[][] board, int numMoves, Player[] players, Player currentPlayer, List<MoveRecord> moveRecords) {
+        public GameHistory(JesonMor jesonMor) {
+
             //board shallow copy
-            int boardSize = board.length;
+            int boardSize = jesonMor.board.length;
             this.savedBoard = new Piece[boardSize][boardSize];
             for (int i=0; i < boardSize; i++){
                 for (int j=0; j < boardSize; j++){
-                    this.savedBoard[i][j] = board[i][j];
+                    this.savedBoard[i][j] = jesonMor.board[i][j];
                 }
             }
 
             //copy numMove
-            this.savedNumMoves = numMoves;
+            this.savedNumMoves = jesonMor.numMoves;
 
             // copy current player
-            this.savedPlayer = currentPlayer;
+            this.savedPlayer = jesonMor.currentPlayer;
 
             //copy Player score
-            for (Player player : players) {
+            for (Player player : jesonMor.getConfiguration().getPlayers()) {
                 this.playerScores.put(player, player.getScore());
             }
 
             //copy move records
-            this.savedMoveRecords.addAll(moveRecords);
+            this.savedMoveRecords.addAll(jesonMor.moveRecords);
         }
 
     }
@@ -112,6 +113,12 @@ public class JesonMor extends Game {
             } else {
                 var move = player.nextMove(this, availableMoves);
                 var movedPiece = this.getPiece(move.getSource());
+
+                if (currentPlayer instanceof HumanPlayer){
+                    GameHistory history
+                            = new GameHistory(this);
+                    this.gameHistories.push(history);
+                }
                 // make move
                 this.movePiece(move);
                 this.numMoves++;
