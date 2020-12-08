@@ -63,10 +63,10 @@ public class MakeMoveByBehavior {
                                 })
                                 .collect(Collectors.toList()).toArray(Move[]::new);
 
-                if (capturingMoves.length <= 0){
-                    nextMove = availableMoves[new Random().nextInt(availableMoves.length)];
-                }else{
+                if (capturingMoves.length > 0){
                     nextMove = capturingMoves[new Random().nextInt(capturingMoves.length)];
+                }else{
+                    nextMove = availableMoves[new Random().nextInt(availableMoves.length)];
                 }
             }
             case BLOCKING -> {
@@ -92,10 +92,10 @@ public class MakeMoveByBehavior {
                                 })
                                 .collect(Collectors.toList()).toArray(Move[]::new);
 
-                if (blockingMoves.length <= 0){
-                    nextMove = availableMoves[new Random().nextInt(availableMoves.length)];
-                }else{
+                if (blockingMoves.length > 0){
                     nextMove = blockingMoves[new Random().nextInt(blockingMoves.length)];
+                }else{
+                    nextMove = availableMoves[new Random().nextInt(availableMoves.length)];
                 }
             }
             default -> {
