@@ -210,7 +210,7 @@ public class Archer extends Piece {
                 Place place = (Place) parameters[1];
                 Move[] moves = this.getAvailableMoves(game, place);
 
-                if (moves.length <=0){
+                if (!(moves.length > 0)){
                     this.candidateMoveQueue.put(new Archer.InvalidMove());
                     continue;
                 }

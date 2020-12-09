@@ -16,39 +16,44 @@ public class CriticalRegionRule implements Rule {
     @Override
     public boolean validate(Game game, Move move) {
         //TODO
+        //no piece
         Piece currentPiece = game.getPiece(move.getSource());
         if (currentPiece == null){
             return false;
         }
-
+        //not knight, rule not apply
         if (!(currentPiece instanceof Knight)){
             return true;
         }
-
+        //already in critical region
         if (isInCriticalRegion(game, move.getSource())){
             return true;
         }
-
+        //not moving to critical region
         if (!isInCriticalRegion(game, move.getDestination())){
             return true;
         }
-
+        //count number of knight in critical region belong to current player
         int capacity = game.getConfiguration().getCriticalRegionCapacity();
-        Player currentPlayer = currentPiece.getPlayer();
+        Player piecePlayer = currentPiece.getPlayer();
         int numCriticalKnight = 0;
         int boardSize = game.getConfiguration().getSize();
         for (int i=0; i < boardSize; i++){
             for (int j=0; j < boardSize; j++){
                 Piece tempPiece = game.getPiece(i, j);
+                //no piece
                 if (tempPiece == null){
                     continue;
                 }
-                if (!tempPiece.getPlayer().equals(currentPlayer)){
+                //not piece belong this player
+                if (!tempPiece.getPlayer().equals(piecePlayer)){
                     continue;
                 }
+                //not knight
                 if (!(tempPiece instanceof Knight)){
                     continue;
                 }
+                //not in critical region
                 if (!isInCriticalRegion(game, new Place(i,j))){
                     continue;
                 }
