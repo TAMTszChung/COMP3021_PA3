@@ -182,8 +182,6 @@ public class MakeMoveByStrategy {
             return false;
         }
 
-        Place center = game.getCentralPlace();
-
         int distCenterX = Math.abs(move.getDestination().x() - game.getCentralPlace().x());
         int distCenterY = Math.abs(move.getDestination().y() - game.getCentralPlace().y());
 
