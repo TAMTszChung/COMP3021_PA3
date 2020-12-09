@@ -37,7 +37,6 @@ public class JesonMor extends Game {
         public List<MoveRecord> savedMoveRecords = new ArrayList<>();
 
         public GameHistory(JesonMor jesonMor) {
-
             //board shallow copy
             int boardSize = jesonMor.board.length;
             this.savedBoard = new Piece[boardSize][boardSize];
@@ -245,9 +244,7 @@ public class JesonMor extends Game {
      */
     public @NotNull Move[] getAvailableMoves(Player player) {
         //TODO
-        if (player instanceof  ComputerPlayer){
-            System.out.println("Computer is figuring out next move...");
-        }
+        //get all necessary info about player's pieces
         HashMap<Place, Piece> pieceMap = new HashMap<>();
         int boardSize = this.getConfiguration().getSize();
         for (int i=0; i<boardSize; i++){
@@ -263,7 +260,11 @@ public class JesonMor extends Game {
                 pieceMap.put(currentPlace, currentPiece);
             }
         }
-
+        //print sentence if it is computer Player
+        if (player instanceof  ComputerPlayer){
+            System.out.println("Computer is figuring out next move...");
+        }
+        //get the available moves by getting the move of each piece
         Move[] results = pieceMap
                 .entrySet()
                 .parallelStream()
