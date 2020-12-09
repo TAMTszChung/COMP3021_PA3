@@ -58,7 +58,6 @@ public class ResumePieceAction extends Action {
                     + " does not belong to computer player, thus can not be paused");
         }
         //correctly getting computer piece
-        Thread targetThread = game.getConfiguration().getPieceThread(targetPiece);
         targetPiece.resume();
     }
 
