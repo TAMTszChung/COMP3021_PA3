@@ -85,13 +85,14 @@ public class Archer extends Piece {
      * @return one candidate move
      */
     @Override
-    public Move getCandidateMove(Game game, Place source) {
+    public synchronized Move getCandidateMove(Game game, Place source) {
         //TODO
         Object[] parameters = {game, source};
         //clear both queue to prevent getting wrong move due to previous data
         calculateMoveParametersQueue.clear();
         candidateMoveQueue.clear();
         try {
+            //put new entry
             this.calculateMoveParametersQueue.put(parameters);
             Move candidate = this.candidateMoveQueue.poll(1, TimeUnit.SECONDS);
             if (candidate instanceof Archer.InvalidMove){

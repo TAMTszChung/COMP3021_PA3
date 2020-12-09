@@ -97,6 +97,7 @@ public class Knight extends Piece {
         calculateMoveParametersQueue.clear();
         candidateMoveQueue.clear();
         try {
+            //put new entry
             this.calculateMoveParametersQueue.put(parameters);
             Move candidate = this.candidateMoveQueue.poll(1, TimeUnit.SECONDS);
             if (candidate instanceof Knight.InvalidMove){
