@@ -228,7 +228,11 @@ public class Knight extends Piece {
                 //put the candidate move to queue to be polled
                 MakeMoveByBehavior moveByBehavior = new MakeMoveByBehavior(game, moves, this.behavior);
                 Move nextMove = moveByBehavior.getNextMove();
-                this.candidateMoveQueue.put(nextMove);
+                if (nextMove == null){
+                    this.candidateMoveQueue.put(new Knight.InvalidMove());
+                }else{
+                    this.candidateMoveQueue.put(nextMove);
+                }
             } catch (InterruptedException e) {
                 //go to next iteration to handle the interrupt in try block
             }
